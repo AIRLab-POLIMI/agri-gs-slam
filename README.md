@@ -23,7 +23,7 @@ robust multimodal perception.
 If you find this work useful, please cite it once available:
 
 ```bibtex
-@article{usuelli2024agrigsslam,
+@article{usuelli2025agrigsslam,
   ... TODO
 }
 ```
