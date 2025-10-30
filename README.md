@@ -8,18 +8,9 @@
 > [!CAUTION]
 > Temporary Citation (Preprint) - ArXiv: TODO
 
-## 🎯 Overview
+## 🚜 Overview
 
 AgriGS-SLAM is a Visual–LiDAR SLAM framework designed for robust real-time 3D mapping and reconstruction in agricultural orchards. The system couples direct LiDAR odometry and loop closures with multi-camera 3D Gaussian Splatting (3DGS) rendering to handle the unique challenges of orchard environments, including repetitive row geometry, seasonal appearance changes, and wind-driven foliage motion.
-
-## 🚜 Key Features
-
-- **🌾 Multi-Modal Perception**: Fuses visual and LiDAR data for robust odometry and mapping
-- **🛰️ Real-Time 3D Reconstruction**: Leverages 3D Gaussian Splatting (3DGS) for efficient high-quality rendering
-- **🍎 Seasonal Robustness**: Demonstrated across dormancy, flowering, and harvesting periods in apple and pear orchards
-- **💾 Memory-Efficient**: Unified gradient-driven map lifecycle preserves fine details while maintaining bounded memory consumption
-- **📐 Geometry-Appearance Coupling**: Probabilistic depth consistency term refines poses and tightens sensor fusion
-- **📊 Standardized Evaluation**: Evaluates both training-view and novel-view synthesis to reduce 3DGS overfitting
 
 ## 📝 Abstract
 
