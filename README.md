@@ -3,7 +3,7 @@
 ![](img/cover.png)
 
 > [!WARNING]
-> The manuscript is currently under submission and revision. The source code will be released once the manuscript is accepted for publication.
+> The manuscript is currently under submission and revision. The source code will be released once the manuscript is accepted for publication, and the dataset release will follow the publication.
 
 > [!CAUTION]
 > Temporary Citation (Preprint) - ArXiv: TODO
