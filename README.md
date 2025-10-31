@@ -16,7 +16,7 @@
 >     eprint={2510.26358},
 >     archivePrefix={arXiv},
 >     primaryClass={cs.RO},
->      url={https://arxiv.org/abs/2510.26358}, 
+>     url={https://arxiv.org/abs/2510.26358}, 
 > }
 > ```
 
