@@ -6,7 +6,13 @@
 > The manuscript is currently under submission and revision. The source code will be released once the manuscript is accepted for publication, and the dataset release will follow the publication.
 
 > [!CAUTION]
-> Temporary Citation (Preprint) - ArXiv: TODO
+> Temporary Citation (Preprint) - ArXiv: http://arxiv.org/abs/2510.26358
+>
+> ```bibtex
+> @article{usuelli2025agrigsslam,
+>   ... TODO
+> }
+> ```
 
 ## 🍎 Overview
 
@@ -17,16 +23,6 @@ AgriGS-SLAM is a Visual–LiDAR SLAM framework designed for robust real-time 3D 
 Autonomous robots in orchards require real-time
 3D scene understanding despite repetitive row geometry, seasonal appearance changes, and wind-driven foliage motion. We present AgriGS-SLAM, a Visual–LiDAR SLAM framework that couples direct LiDAR odometry and loop closures with multi-camera 3D Gaussian Splatting (3DGS) rendering. Batch rasterization across complementary viewpoints recovers orchard structure under occlusions, while a unified gradientdriven map lifecycle executed between keyframes preserves fine details and bounds memory. Pose refinement is guided by a probabilistic LiDAR-based depth consistency term, backpropagated through the camera projection to tighten geometryappearance coupling. We deploy the system on a field platform in apple and pear orchards across dormancy, flowering, and harvesting, using a standardized trajectory protocol that evaluates both training-view and novel-view synthesis to reduce 3DGS overfitting in evaluation. Across seasons and sites, AgriGS-SLAM delivers sharper, more stable reconstructions and steadier trajectories than recent state-of-the-art 3DGS-SLAM baselines while maintaining real-time performance ontractor. While demonstrated in orchard monitoring, the approach can be applied to other outdoor domains requiring
 robust multimodal perception.
-
-##  📚 Citation
-
-If you find this work useful, please cite it once available:
-
-```bibtex
-@article{usuelli2025agrigsslam,
-  ... TODO
-}
-```
 
 ## 👨‍🌾 Authors
 
