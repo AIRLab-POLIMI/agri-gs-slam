@@ -9,7 +9,7 @@
 > Temporary Citation (Preprint) - ArXiv: http://arxiv.org/abs/2510.26358
 >
 > ```bibtex
-> @misc{usuelli2025agrigsslamorchardmappingseasons,
+> @misc{usuelli2025agrigsslam,
 >     title={AgriGS-SLAM: Orchard Mapping Across Seasons via Multi-View Gaussian Splatting SLAM}, 
 >     author={Mirko Usuelli and David Rapado-Rincon and Gert Kootstra and Matteo Matteucci},
 >     year={2025},
