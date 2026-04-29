@@ -1,4 +1,4 @@
-# 🚜 AgriGS-SLAM: Orchard Mapping Across Seasons via Multi-View Gaussian Splatting SLAM [IEEE RA-L 2026]
+# 🚜 AgriGS-SLAM: Orchard Mapping Across Seasons via Multi-View Gaussian Splatting SLAM [RA-L 2026]
 
 ![](docs/cover.png)
 
