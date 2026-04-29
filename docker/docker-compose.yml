@@ -1,0 +1,64 @@
+services:
+  agri-gs-slam:
+    # Shared memory size for large data processing
+    shm_size: 8g
+    # Build configuration
+    build:
+      args:
+        GROUP_ID: ${GROUP_ID:-1000}
+        USER_ID: ${USER_ID:-1000}
+        USER_NAME: ${USER:-mirko}
+      context: ..
+      dockerfile: docker/Dockerfile
+    # Container settings
+    container_name: agri-gs-slam-container
+    hostname: agri-gs-slam-container
+    image: mirkousuelli/agri-gs-slam:stable
+    # GPU resource allocation
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+              count: 1
+              driver: nvidia
+    # Network configuration
+    # network_mode: host
+    ports:
+      - "8501:8501"   # Streamlit dashboard
+    # dns:
+    #   - 1.1.1.1
+    #   - 1.0.0.1
+    #   - 8.8.8.8
+    # Environment variables
+    environment:
+      - DISPLAY=${DISPLAY}
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - XDG_RUNTIME_DIR=/run/user/${USER_ID:-1000}
+    # Container behavior
+    privileged: true
+    restart: always
+    stdin_open: true
+    tty: true
+    # Volume mounts
+    volumes:
+      # X11 display forwarding
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      # Time synchronization
+      - /etc/localtime:/etc/localtime:ro
+      # Device access
+      - /dev/*:/dev/*
+      # Application code - mount parent directory instead of current
+      - ../:/agri_gs_slam
+      # Datasets (host) -> /agri_gs_slam/data (container). Set DATA_DIR to override host path.
+      - ${DATA_DIR:-../data}:/agri_gs_slam/data
+      # Results (host) -> /agri_gs_slam/results (container). Set RESULTS_DIR to override host path.
+      - ${RESULTS_DIR:-../results}:/agri_gs_slam/results
+      # Media access
+      - /run/media:/media
+      # User home directory for consistency
+      - /home/${USER}:/home/${USER}
+    # Working directory
+    working_dir: /agri_gs_slam

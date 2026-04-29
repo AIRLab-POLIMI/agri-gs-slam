@@ -1,0 +1,153 @@
+agrigs_slam:
+  dataloader:
+    path: "/agri_gs_slam/data/agri-gs-slam-dataset-demo"  # Path to the input dataset (demo is fetched by scripts/setup.sh --demo)
+    # Which cameras to use. Defaults to all three if omitted. Examples:
+    #   enabled_cameras: ["cam_1"]
+    #   enabled_cameras: ["cam_1", "cam_3"]
+    enabled_cameras: ["cam_1", "cam_2", "cam_3"]
+    cameras:
+      - camera_id: "cam_1" # Unique frame ID
+        extrinsic: [-0.47487634, 0.26944467, -0.64955697, -0.51250229, -0.48094813, -0.4999257, 0.50606777] # [x, y, z, qx, qy, qz, qw]
+        intrinsic: [723.464039, 724.229741, 978.331058, 575.320146]   # [fx, fy, cx, cy]
+        distortion: [-0.007391, -0.000259, -0.001083, -0.000425, 0.0]  # [k1, k2, p1, p2, k3]
+      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      - camera_id: "cam_2"
+        extrinsic: [0.14374693, 0.06611648, -0.58771134, -0.49272718, 0.51430475, -0.50217014, 0.49044439] # [x, y, z, qx, qy, qz, qw]
+        intrinsic: [737.81004, 737.95291, 975.08049, 569.79751]   # [fx, fy, cx, cy]
+        distortion: [-0.007018, 0.000347, -0.001131, -0.000008, 0.0] # [k1, k2, p1, p2, k3]
+      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      - camera_id: "cam_3"
+        extrinsic: [-0.46632726, -0.25003767, -0.53362988, 0.49256734, 0.51452, -0.49869778, 0.49391002] # [x, y, z, qx, qy, qz, qw]
+        intrinsic: [727.394021, 727.936095, 978.219867, 582.198871]   # [fx, fy, cx, cy]
+        distortion: [-0.006703, 0.000582, -0.000410, -0.000527, 0.0]  # [k1, k2, p1, p2, k3]
+      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    lidar:
+        extrinsic: [-0.02773899, -0.02091633, -0.18058062, 0.36610677, 0.93049435, 0.01022933, 0.00643797] # [x, y, z, qx, qy, qz, qw]
+      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  slam:
+    frontend:
+      # Keyframe selection thresholds
+      keyframe_dist_thresh: 1.0          # Distance threshold for keyframe selection (meters)
+      keyframe_rot_thresh: 15.0          # Rotation threshold for keyframe selection (degrees)
+      # Adaptive tracking
+      enable_adaptive: true              # Enable adaptive parameters
+      # Voxel filtering
+      use_voxel_filter: true             # Enable voxel filtering
+      voxel_size: 0.1                    # Voxel size for filtering (meters)
+      # Submap parameters
+      submap:
+        knn: 10                          # K-nearest neighbors for submap
+        kcv: 10                          # K-covariance neighbors
+        kcc: 10                          # K-correspondence neighbors
+      # Voxel filter parameters
+      voxel_filter:
+        use_scan_filter: true            # Enable scan-level voxel filtering
+        scan_res: 0.1                    # Scan voxel resolution (meters)
+        use_submap_filter: true          # Enable submap-level voxel filtering
+        submap_res: 0.25                 # Submap voxel resolution (meters)
+      # GICP parameters
+      gicp:
+        min_points: 10                   # Minimum points for GICP
+        max_iter_s2s: 64                 # Maximum iterations for scan-to-scan
+        max_iter_s2m: 64                 # Maximum iterations for scan-to-map
+        transform_eps: 0.01              # Transformation epsilon
+        fitness_eps: 0.01                # Fitness epsilon
+      # Normal computation for LiDAR
+      normals:
+        k_neighbors: 10                  # Number of neighbors for normal computation
+        radius: 0.20                     # Search radius for normal computation (meters)
+      # Initial pose [x, y, z, qx, qy, qz, qw]
+      initial_pose: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+
+    backend:
+      # Loop closure detection
+      loop_closure_threshold: 2.0        # Distance threshold for loop closure detection (meters)
+      min_keyframe_distance: 1.0         # Minimum distance between keyframes (meters)
+      max_correspondence_distance: 0.5   # Maximum distance for point correspondences (meters)
+      # ISAM2 parameters
+      isam2:
+        relinearize_threshold: 0.01      # Relinearization threshold
+      # Noise models (standard deviations)
+      noise_models:
+        prior_pose: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]     # Prior pose noise [x,y,z,rx,ry,rz]
+        odometry: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]       # Odometry noise [x,y,z,rx,ry,rz]
+        loop_closure: [0.3, 0.3, 0.3, 0.2, 0.2, 0.2]   # Loop closure noise [x,y,z,rx,ry,rz]
+      # Loop closure detection parameters
+      loop_detection:
+        min_keyframe_history: 10         # Minimum keyframes before checking loop closures
+        skip_recent_keyframes: 10        # Skip this many recent keyframes for loop detection
+        correspondence_ratio_thresh: 0.3 # Minimum correspondence ratio for loop closure
+        max_points_subsample: 1000       # Maximum points to use for similarity check
+      # Optimization frequency
+      optimization:
+        optimize_every_n_keyframes: 10   # Optimize graph every N keyframes
+
+  gaussian_splatting:
+    strategy: agri-gs                          # Densification strategy: 'agri-gs' (StrategyAgriGS, default) or 'default' (Kerbl 3DGS DefaultStrategy)
+    mapper:
+      memory_threshold: 0.8                    # Fraction of GPU memory usage before triggering memory management
+      adaptive_voxel_size: true                # Enable adaptive voxel size based on point density
+      base_voxel_size: 0.25                    # Base voxel size for splat management (meters)
+      min_scale: 0.000001                      # Minimum allowed scale for splats
+      max_scale: 10.0                          # Maximum allowed scale for splats
+      opacity_threshold: 0.005                 # Opacity threshold for pruning splats
+      lr_decay_factor: 0.99                    # Learning rate decay factor per step
+      lr_decay_steps: 100                      # Number of steps between learning rate decay
+      batch_size: 1                            # Batch size for training; learning rates may be scaled automatically
+      init_opacity: 0.1                        # Initial opacity for new splats
+      init_scale: 1.0                          # Initial scale for new splats
+      scene_scale: 1.0                         # Scene scaling factor
+      sh_degree: 3                             # Spherical harmonics degree
+      sparse_grad: false                       # Whether to use sparse gradients
+
+    splatter:
+      results: "/agri_gs_slam/results"    # where to write outputs (will create subfolders ckpts/, stats/, renders/)
+      image_every: 1                  # Save images every N steps
+      packed: true            # pack splats into a single buffer
+      sparse_grad: false      # use sparse gradients
+      antialiased: false       # use anti‑aliased rasterization
+    
+    loss:
+      # Loss component flags
+      enable_color_loss: true                  # Enable RGB loss
+      enable_ssim_loss: true                   # Enable SSIM loss
+      enable_lidar_kl_div_loss: true           # Enable LiDAR depth KL-divergence loss
+      enable_depth_loss: false                 # Enable depth supervision
+      enable_chamfer_loss: false               # Enable Chamfer distance loss
+      enable_normal_loss: false                # Enable point-to-plane geometric alignment
+      enable_raydrop_loss: false               # Enable Raydrop loss
+      enable_line_of_sight_loss: false         # Enable Line-of-Sight loss
+
+      # Loss weights (lambdas)
+      l1_lambda: 0.8                           # L1 loss weight
+      ssim_lambda: 0.2                         # SSIM loss weight
+      depth_lambda: 1.0                        # Depth loss weight
+      chamfer_lambda: 0.001                    # Chamfer loss weight
+      normal_lambda: 0.01                      # Normal alignment loss weight
+      raydrop_lambda: 0.01                     # Raydrop loss weight
+      los_lambda: 1.0                          # Line-of-Sight loss weight
+
+  viewer:
+    enabled: false  # Whether to enable the viewer
+    port: 8080      # Port for viewer server
+    output_dir: ""  # Output directory for results
+    scene_grid: 1   # Repeat scene in NxN grid (must be odd)
+    ckpt: []  # Path(s) to checkpoint .pt files
+    with_ut: false # Use uncentered transform
+    with_eval3d: false # Use eval 3D
+    
+    # Rendering tab state defaults
+    render_state:
+      max_sh_degree: 5                           # Maximum spherical harmonics degree
+      near_plane: 0.01                           # Near clipping plane
+      far_plane: 100.0                           # Far clipping plane
+      radius_clip: 0.0                           # 2D radius clipping threshold
+      eps2d: 0.3                                 # Regularization epsilon for 2D covariance
+      backgrounds: [0.0, 0.0, 0.0]               # Background color RGB
+      render_mode: "rgb"                         # Render mode: rgb, depth(accumulated), depth(expected), alpha
+      normalize_nearfar: false                   # Normalize depth values
+      inverse: false                             # Invert depth values
+      colormap: "inferno"                        # Colormap for depth/alpha visualization
+      rasterize_mode: "classic"                  # Rasterization mode: classic or antialiased
+      camera_model: "pinhole"                    # Camera model: pinhole, ortho, fisheye

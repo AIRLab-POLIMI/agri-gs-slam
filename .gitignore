@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.venv/
+venv/
+tea_debug.log
+
+# C++ / CMake build artifacts
+build/
+src/odometry/build/
+src/scancontext/build/
+src/__pycache__/
+src/utils/__pycache__/
+*.o
+*.obj
+install_manifest.txt
+
+# Dataset & run outputs (large, machine-local)
+data/
+results/
+
+# Logs
+*.log
+
+# Editor / OS
+.vscode/
+.idea/
+.claude
+.DS_Store
